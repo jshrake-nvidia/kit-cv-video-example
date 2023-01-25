@@ -1,6 +1,6 @@
 # kit-cv-video-example
 
-Omniverse Kit example extension that demonstrates how to stream video (webcam, RTSP, mp4, mov, ) to a dynamic texture using [OpenCV VideoCapture](https://docs.opencv.org/3.4/dd/d43/tutorial_py_video_display.html) and [omni.ui.DynamicTextureProvider](https://docs.omniverse.nvidia.com/kit/docs/omni.ui/latest/omni.ui/omni.ui.ByteImageProvider.html#byteimageprovider).
+Example Omniverse Kit extension that demonstrates how to stream video (webcam, RTSP, mp4, mov, ) to a dynamic texture using [OpenCV VideoCapture](https://docs.opencv.org/3.4/dd/d43/tutorial_py_video_display.html) and [omni.ui.DynamicTextureProvider](https://docs.omniverse.nvidia.com/kit/docs/omni.ui/latest/omni.ui/omni.ui.ByteImageProvider.html#byteimageprovider).
 
 ![demo](./images/demo.gif)
 
