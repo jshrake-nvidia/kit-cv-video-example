@@ -4,6 +4,8 @@ Example Omniverse Kit extension that demonstrates how to stream video (webcam, R
 
 ![demo](./images/demo.gif)
 
+**WARNING**: This is a prototype and is not necessarily ready for production use. The performance of this example may not meet your performance requirements.
+
 ## Getting Started
 
 - Requires Kit 104.1 >=
