@@ -6,6 +6,9 @@ Omniverse Kit example extension that demonstrates how to stream video (webcam, R
 
 ## Getting Started
 
+- Requires Kit 104.1 >=
+- Tested in Create 2022.3.1
+
 ```
 ./link_app.bat --app create
 ./app/omni.create.bat --/rtx/ecoMode/enabled=false --ext-folder exts --enable omni.cv-video.example
