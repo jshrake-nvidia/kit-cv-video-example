@@ -19,9 +19,11 @@ import numpy as np
 import omni.ext
 import omni.kit.app
 import omni.ui
+import warp as wp
 from pxr import Kind, Sdf, Usd, UsdGeom, UsdShade
 
 DEFAULT_STREAM_URI = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
+#DEFAULT_STREAM_URI = "C:/Users/jshrake/Downloads/720p.mp4"
 
 
 def create_textured_plane_prim(
@@ -69,6 +71,7 @@ class OpenCvVideoStream:
     def __init__(self, name: str, stream_uri: str):
         self.name = name
         self.uri = stream_uri
+        self.texture_array = None
         try:
             # Attempt to treat the uri as an int
             # https://docs.opencv.org/3.4/d8/dfe/classcv_1_1VideoCapture.html#a5d5f5dacb77bbebdcbfb341e3d4355c1
@@ -100,7 +103,10 @@ class OpenCvVideoStream:
         carb.profiler.begin(0, "read")
         ret, frame = self._video_capture.read()
         carb.profiler.end(0)
+        # The video may be at the end, loop by setting the frame position back to 0
         if not ret:
+            self._video_capture.set(cv.CAP_PROP_POS_FRAMES, 0)
+            self._last_read = time.time()
             return
 
         # By default, OpenCV converts the frame to BGR
@@ -114,13 +120,12 @@ class OpenCvVideoStream:
         carb.profiler.end(0)
         height, width, channels = frame.shape
 
-        carb.profiler.begin(0, "flatten frame to list")
-        frame_list = frame.flatten().tolist()
-        carb.profiler.end(0)
-
         carb.profiler.begin(0, "set_bytes_data")
-        # See https://docs.omniverse.nvidia.com/kit/docs/omni.ui/latest/omni.ui/omni.ui.ByteImageProvider.html#omni.ui.ByteImageProvider.set_bytes_data_from_gpu
-        self._dynamic_texture.set_bytes_data(frame_list, [width, height], omni.ui.TextureFormat.BGRA8_UNORM)
+        if self.texture_array is None:
+            self.texture_array = wp.array(frame)
+        else:
+            self.texture_array.assign(frame)
+        self._dynamic_texture.set_bytes_data_from_gpu(self.texture_array.ptr, [width, height], omni.ui.TextureFormat.BGRA8_UNORM, stride=-1)
         carb.profiler.end(0)
 
 class OmniRtspExample(omni.ext.IExt):
@@ -166,6 +171,7 @@ class OmniRtspExample(omni.ext.IExt):
             carb.log_error(f"Error opening stream: {stream_uri}")
             return
         self._streams.append(video_stream)
+        carb.log_info(f"Creating video steam {stream_uri} {video_stream.width}x{video_stream.height}")
         # Create the mesh + material + shader
         model_root = UsdGeom.Xform.Define(stage, prim_path)
         Usd.ModelAPI(model_root).SetKind(Kind.Tokens.component)
