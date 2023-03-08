@@ -22,8 +22,8 @@ import omni.ui
 import warp as wp
 from pxr import Kind, Sdf, Usd, UsdGeom, UsdShade
 
-DEFAULT_STREAM_URI = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
-#DEFAULT_STREAM_URI = "C:/Users/jshrake/Downloads/720p.mp4"
+#DEFAULT_STREAM_URI = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
+DEFAULT_STREAM_URI = "C:/Users/jshrake/Downloads/yes_720p.mkv"
 
 
 def create_textured_plane_prim(
@@ -116,16 +116,12 @@ class OpenCvVideoStream:
         frame: np.ndarray
 
         carb.profiler.begin(0, "color space conversion")
-        frame = cv.cvtColor(frame, cv.COLOR_BGR2BGRA)
+        frame = cv.cvtColor(frame, cv.COLOR_BGR2RGBA)
         carb.profiler.end(0)
         height, width, channels = frame.shape
 
         carb.profiler.begin(0, "set_bytes_data")
-        if self.texture_array is None:
-            self.texture_array = wp.array(frame)
-        else:
-            self.texture_array.assign(frame)
-        self._dynamic_texture.set_bytes_data_from_gpu(self.texture_array.ptr, [width, height], omni.ui.TextureFormat.BGRA8_UNORM, stride=-1)
+        self._dynamic_texture.set_data_array(frame, [width, height, channels])
         carb.profiler.end(0)
 
 class OmniRtspExample(omni.ext.IExt):
