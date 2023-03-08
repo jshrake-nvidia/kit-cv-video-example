@@ -23,7 +23,7 @@ import warp as wp
 from pxr import Kind, Sdf, Usd, UsdGeom, UsdShade
 
 #DEFAULT_STREAM_URI = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
-DEFAULT_STREAM_URI = "C:/Users/jshrake/Downloads/yes_720p.mkv"
+DEFAULT_STREAM_URI = "C:/Users/jshrake/Downloads/1080p.mp4"
 
 
 def create_textured_plane_prim(
@@ -126,13 +126,10 @@ class OpenCvVideoStream:
 
 class OmniRtspExample(omni.ext.IExt):
     def on_startup(self, ext_id):
-        self._thread = threading.Thread(target=asyncio.run, args=(self._update_streams(),))
-        self._thread.daemon = True
-        self._thread.start()
-        self._running = True
         # stream = omni.kit.app.get_app().get_update_event_stream()
         # self._sub = stream.create_subscription_to_pop(self._update_streams, name="update")
         self._streams: List[OpenCvVideoStream] = []
+        self._stream_threads: List[threading.Thread] = []
         self._stream_uri_model = omni.ui.SimpleStringModel(DEFAULT_STREAM_URI)
         self._window = omni.ui.Window("OpenCV Video Streaming Example", width=800, height=200)
         with self._window.frame:
@@ -143,10 +140,14 @@ class OmniRtspExample(omni.ext.IExt):
     @carb.profiler.profile
     async def _update_streams(self):
         while self._running:
-            # await omni.kit.app.get_app().next_update_async()
             await asyncio.sleep(0.001)
             for stream in self._streams:
                 stream.update_texture()
+
+    @carb.profiler.profile
+    def _update_stream(self, i):
+        while self._running:
+            self._streams[i].update_texture()
 
     def _on_click_create(self):
         name = f"Video{len(self._streams)}"
@@ -174,9 +175,18 @@ class OmniRtspExample(omni.ext.IExt):
         create_textured_plane_prim(stage, prim_path, image_name, video_stream.width, video_stream.height)
         # Clear the string model
         # self._stream_uri_model.set_value("")
+        # Create the thread to pump the video stream
+        self._running = True
+        i = len(self._streams) - 1
+        thread = threading.Thread(target=self._update_stream, args=(i, ))
+        thread.daemon = True
+        thread.start()
+        self._stream_threads.append(thread)
 
     def on_shutdown(self):
         # self._sub.unsubscribe()
         self._running = False
-        self._thread.join()
+        for thread in self._stream_threads:
+            thread.join()
+        self._stream_threads = []
         self._streams = []
