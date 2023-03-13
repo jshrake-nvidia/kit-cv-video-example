@@ -22,8 +22,8 @@ import omni.ui
 import warp as wp
 from pxr import Kind, Sdf, Usd, UsdGeom, UsdShade
 
-#DEFAULT_STREAM_URI = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
-DEFAULT_STREAM_URI = "C:/Users/jshrake/Downloads/1080p.mp4"
+DEFAULT_STREAM_URI = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
+#DEFAULT_STREAM_URI = "C:/Users/jshrake/Downloads/1080p.mp4"
 
 
 def create_textured_plane_prim(
@@ -138,16 +138,12 @@ class OmniRtspExample(omni.ext.IExt):
                 omni.ui.Button("Create", clicked_fn=self._on_click_create)
 
     @carb.profiler.profile
-    async def _update_streams(self):
-        while self._running:
-            await asyncio.sleep(0.001)
-            for stream in self._streams:
-                stream.update_texture()
-
-    @carb.profiler.profile
     def _update_stream(self, i):
-        while self._running:
-            self._streams[i].update_texture()
+        async def loop():
+            while self._running:
+                await asyncio.sleep(0.001)
+                self._streams[i].update_texture()
+        asyncio.run(loop())
 
     def _on_click_create(self):
         name = f"Video{len(self._streams)}"
