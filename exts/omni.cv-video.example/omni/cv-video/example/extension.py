@@ -4,7 +4,6 @@ and [omni.ui.DynamicTextureProvider](https://docs.omniverse.nvidia.com/kit/docs/
 
 TODO:
 - [x] Investigate how to perform the color space conversion and texture updates in a separate thread
-    - This isn't improving performance like I might expect. After profiling, it appears we are still bottlenecked by a usd context lock
 - [ ] Investigate how to avoid the color space conversion and instead use the native format of the frame provided by OpenCV
 """
 import asyncio
