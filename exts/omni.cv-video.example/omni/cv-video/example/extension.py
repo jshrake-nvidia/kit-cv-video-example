@@ -19,7 +19,6 @@ import numpy as np
 import omni.ext
 import omni.kit.app
 import omni.ui
-import warp as wp
 from pxr import Kind, Sdf, Usd, UsdGeom, UsdShade
 
 DEFAULT_STREAM_URI = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
