@@ -4,6 +4,8 @@ Example Omniverse Kit extension that demonstrates how to stream video (webcam, R
 
 ![demo](./images/demo.gif)
 
+For a basic example of how to use `omni.ui.DynamicTextureProvider`, please see <https://github.com/jshrake-nvidia/kit-dynamic-texture-example>.
+
 **WARNING**: This is a prototype and is not necessarily ready for production use. The performance of this example may not meet your performance requirements. This example is a temporary solution until a more mature and robust streaming solution becomes available.
 
 ## Getting Started
@@ -26,4 +28,3 @@ Here are a few URIs you can use to test:
 - HLS: `https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8`
 - RTSP: `rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4`
 
-For a basic example of how to use `omni.ui.DynamicTextureProvider`, please see <https://github.com/jshrake-nvidia/kit-dynamic-texture-example>.
