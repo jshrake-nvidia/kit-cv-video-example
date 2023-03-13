@@ -4,12 +4,12 @@ Example Omniverse Kit extension that demonstrates how to stream video (webcam, R
 
 ![demo](./images/demo.gif)
 
-**WARNING**: This is a prototype and is not necessarily ready for production use. The performance of this example may not meet your performance requirements.
+**WARNING**: This is a prototype and is not necessarily ready for production use. The performance of this example may not meet your performance requirements. This example is a temporary solution until a more mature and robust streaming solution becomes available.
 
 ## Getting Started
 
 - Requires Kit 104.1 >=
-- Tested in Create 2022.3.1
+- Tested in Create 2022.3.1, 2022.3.3
 
 ```
 ./link_app.bat --app create
