@@ -6,7 +6,7 @@ Example Omniverse Kit extension that demonstrates how to stream video (webcam, R
 
 For a basic example of how to use `omni.ui.DynamicTextureProvider`, please see <https://github.com/jshrake-nvidia/kit-dynamic-texture-example>.
 
-**WARNING**: This is a prototype and is not necessarily ready for production use. The performance of this example may not meet your performance requirements and is not optimized. This example is a temporary solution until a more mature and robust streaming solution becomes available.
+**WARNING**: This is a prototype and is not necessarily ready for production use. The performance of this example may not meet your performance requirements and is not optimized. This example is a temporary solution until a more mature and optimized streaming solution becomes available in the platform. This example currently only scales to a very limited number of low resolution streams.
 
 ## Getting Started
 
